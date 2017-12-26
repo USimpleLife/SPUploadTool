@@ -1,3 +1,7 @@
 # SPUploadTool
 iOS通过切片仿断点机制上传文件
-<img src="http://images2017.cnblogs.com/blog/912458/201712/912458-20171218170114678-351043689.png" style="max-width:50%" />
+```objc
+    // 这里需要配置上传的接口 相关参数自己修改
+    NSString *const kSuperUploadTestUrl = @"http://www.cnblogs.com/chao8888/p/8058457.html";
+```
+![效果图](demo.png)
