@@ -4,4 +4,4 @@ iOS通过切片仿断点机制上传文件
     // 这里需要配置上传的接口 相关参数自己修改
     NSString *const kSuperUploadTestUrl = @"http://www.cnblogs.com/chao8888/p/8058457.html";
 ```
-![效果图](demo.png)
+![效果图](https://github.com/USimpleLife/SPUploadTool/demo.png)
