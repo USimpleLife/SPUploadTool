@@ -79,9 +79,32 @@ static NSString *uploadListName = @"uploadList";
     
 }
 
+#pragma mark- first upload 断点(NSURL)
+- (void)uploadUrl:(NSURL *)mediaUrl withModel:(SPDocUploadModel *)model completion:(void(^)(void))completion {
+    
+    int64_t length = [self fileSizeAtPath:mediaUrl];
+    NSInteger count = length / (kSuperUploadBlockSize);
+    NSInteger blockCount = length % (kSuperUploadBlockSize) == 0 ? count : count + 1;
+    
+    model.filePath = [self writeToCacheUrl:mediaUrl appendNameString:model.lastPathComponent];
+    model.totalCount = blockCount;
+    model.totalSize = length;
+    
+    
+    for (NSInteger i = 0; i < count ; i ++) {
+        NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:mediaUrl.path];
+        [handle seekToFileOffset:kSuperUploadBlockSize * i];
+        NSData *blockData = [handle readDataOfLength:kSuperUploadBlockSize];
+        NSOutputStream *outputStream = [NSOutputStream outputStreamToFileAtPath:model.filePath append:YES];
+        [outputStream open];
+        [outputStream write:blockData.bytes maxLength:blockData.length];
+        [outputStream close];
+    }
+    [self uploadWithModel:model completion:completion];
+}
 
-#pragma mark- first upload 断点
-- (void)uploadData:(NSData *)data withModel:(SPDocUploadModel *)model completion:(void(^)())completion {
+#pragma mark- first upload 断点(NSData)
+- (void)uploadData:(NSData *)data withModel:(SPDocUploadModel *)model completion:(void(^)(void))completion {
     
     NSInteger count = data.length / (kSuperUploadBlockSize);
     NSInteger blockCount = data.length % (kSuperUploadBlockSize) == 0 ? count : count + 1;
@@ -89,6 +112,13 @@ static NSString *uploadListName = @"uploadList";
     model.filePath = [self writeToCacheVideo:data appendNameString:model.lastPathComponent];
     model.totalCount = blockCount;
     model.totalSize = data.length;
+    
+    [self uploadWithModel:model completion:completion];
+}
+
+#pragma mark- first upload
+- (void)uploadWithModel:(SPDocUploadModel *)model completion:(void(^)(void))completion {
+    
     model.uploadedCount = 0;
     model.isRunning = YES;
     
@@ -99,7 +129,7 @@ static NSString *uploadListName = @"uploadList";
     // 片大小
     parameters[@"blockSize"] = @(kSuperUploadBlockSize);
     // 总大小
-    parameters[@"totFileSize"] = @(data.length);
+    parameters[@"totFileSize"] = @(model.totalSize);
     // 扩展名
     parameters[@"suffix"] = model.filePath.pathExtension;
     // 参数和接口
@@ -194,13 +224,25 @@ static NSString *uploadListName = @"uploadList";
 #pragma mark- write cache file
 - (NSString *)writeToCacheVideo:(NSData *)data appendNameString:(NSString *)name {
     
+    NSString *path = [self pathByAppendNameString:name];
+    [data writeToFile:path atomically:NO];
+    return path;
+}
+
+- (NSString *)writeToCacheUrl:(NSURL *)mediaUrl appendNameString:(NSString *)name {
+    
+    NSString *path = [self pathByAppendNameString:name];
+    return path;
+}
+
+
+- (NSString *)pathByAppendNameString:(NSString *)name {
+    
     NSString *cachesDirectory = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
     NSString *createPath =  [cachesDirectory stringByAppendingPathComponent:@"video"];
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     [fileManager createDirectoryAtPath:createPath withIntermediateDirectories:YES attributes:nil error:nil];
     NSString *path = [cachesDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"/video/%.0f%@",[NSDate date].timeIntervalSince1970,name]];
-    [data writeToFile:path atomically:NO];
-    
     return path;
 }
 
@@ -212,6 +254,18 @@ static NSString *uploadListName = @"uploadList";
     
     // 处理完毕后
    [self removeUploadModel:model];
+}
+
+// 通过路径获取文件大小
+- (long long)fileSizeAtPath:(NSURL *)mediaUrl {
+    
+    NSFileManager *manager =[NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:mediaUrl.path]){
+        return [[manager attributesOfItemAtPath:mediaUrl.path error:nil] fileSize];
+    }else {
+        return 0;
+    }
+    
 }
 
 @end

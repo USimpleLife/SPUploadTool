@@ -24,8 +24,15 @@ SingletonH(UploadManager);
  @param data 要上传的数据
  @param model 需要保存的内容
  */
-- (void)uploadData:(NSData *)data withModel:(SPDocUploadModel *)model completion:(void(^)())completion;
+- (void)uploadData:(NSData *)data withModel:(SPDocUploadModel *)model completion:(void(^)(void))completion;
 
+/**
+ 支持断点续传,上传初始化
+ 直接传data类型,自动缓存到本地,上传完毕自动清理
+ @param mediaUrl 要上传的文件URL
+ @param model 需要保存的内容
+ */
+- (void)uploadUrl:(NSURL *)mediaUrl withModel:(SPDocUploadModel *)model completion:(void(^)(void))completion;
 
 /**
  续传

@@ -75,12 +75,15 @@
     NSData *data;
     if (self.fileType == SPFileTypePhoto) {
         data = UIImageJPEGRepresentation(self.selectImage, 1);
+        [[SPUploadManager shareUploadManager] uploadData:data withModel:model completion:^{
+            [self myUploadListItemClick:nil];
+        }];
     }else {
-        data = [NSData dataWithContentsOfURL:self.mediaUrl];
+        [[SPUploadManager shareUploadManager] uploadUrl:self.mediaUrl withModel:model completion:^{
+            [self myUploadListItemClick:nil];
+        }];
     }
-    [[SPUploadManager shareUploadManager] uploadData:data withModel:model completion:^{
-        [self myUploadListItemClick:nil];
-    }];
+  
 }
 
 
