@@ -7,7 +7,7 @@ NSString *const kSuperUploadFile = @"kSuperUploadFile";
 NSString *const kSuperFinishedUpload = @"kSuperFinishedUpload";
 
 // 测试URL 需要自己配置
-NSString *const kSuperUploadTestUrl = @"http://www.cnblogs.com/chao8888/p/8058457.html";
+NSString *const kSuperUploadTestUrl = @"配置上传URL";
 
 NSInteger const kSuperUploadBlockSize = 1 * 1024 * 1024;
 

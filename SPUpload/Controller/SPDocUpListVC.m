@@ -71,14 +71,11 @@ static NSString *const cellID = @"uploadListCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     SPDocUploadModel *docUploadModel = [SPUploadManager shareUploadManager].modelArray[indexPath.row];
-    
-    NSData *data = [NSData dataWithContentsOfFile:docUploadModel.filePath];
-    if (data == nil) {
+    NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:docUploadModel.filePath];
+    if (handle == nil) {
         NSLog(@"SuperNSLog-- 源文件不存在或路径已经改变");
         return;
     }
-    
-   
     docUploadModel.isRunning = !docUploadModel.isRunning;
     if (docUploadModel.isRunning) {
         if (docUploadModel.dataTask.state == NSURLSessionTaskStateSuspended) {

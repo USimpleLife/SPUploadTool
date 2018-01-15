@@ -91,16 +91,23 @@ static NSString *uploadListName = @"uploadList";
     model.totalSize = length;
     
     
+    NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:mediaUrl.path];
+    NSOutputStream *outputStream = [NSOutputStream outputStreamToFileAtPath:model.filePath append:YES];
+    [outputStream open];
+    
     for (NSInteger i = 0; i < count ; i ++) {
-        NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:mediaUrl.path];
-        [handle seekToFileOffset:kSuperUploadBlockSize * i];
-        NSData *blockData = [handle readDataOfLength:kSuperUploadBlockSize];
-        NSOutputStream *outputStream = [NSOutputStream outputStreamToFileAtPath:model.filePath append:YES];
-        [outputStream open];
-        [outputStream write:blockData.bytes maxLength:blockData.length];
-        [outputStream close];
+       [handle seekToFileOffset:kSuperUploadBlockSize * i];
+        @autoreleasepool {
+            NSData *blockData = [handle readDataOfLength:kSuperUploadBlockSize];
+            [outputStream write:blockData.bytes maxLength:blockData.length];
+            blockData = nil;
+        }
     }
+    [outputStream close];
+    [handle closeFile];
+    
     [self uploadWithModel:model completion:completion];
+    
 }
 
 #pragma mark- first upload 断点(NSData)
@@ -179,6 +186,7 @@ static NSString *uploadListName = @"uploadList";
         [handle seekToFileOffset:kSuperUploadBlockSize * i];
         NSData *blockData = [handle readDataOfLength:kSuperUploadBlockSize];
         [formData appendPartWithFileData:blockData name:@"block" fileName:model.filePath.lastPathComponent mimeType:@"application/octet-stream"];
+        [handle closeFile];
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
