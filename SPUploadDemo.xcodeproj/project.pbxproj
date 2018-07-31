@@ -183,8 +183,6 @@
 				BF2CF7991FF0AA8700263A24 /* Sources */,
 				BF2CF79A1FF0AA8700263A24 /* Frameworks */,
 				BF2CF79B1FF0AA8700263A24 /* Resources */,
-				6586CBDCD39F6CBBB0C7D324 /* [CP] Embed Pods Frameworks */,
-				7CA74F8C16A82580CF260956 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -242,36 +240,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6586CBDCD39F6CBBB0C7D324 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SPUploadDemo/Pods-SPUploadDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7CA74F8C16A82580CF260956 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SPUploadDemo/Pods-SPUploadDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		DAFB0C303F347B90A7FE0E68 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -445,7 +413,7 @@
 				GCC_PREFIX_HEADER = SPGlobalFile/SPPrefixHeader.pch;
 				INFOPLIST_FILE = SPUploadDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Super.SPUploadDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = Supertest.SPUploadDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -462,7 +430,7 @@
 				GCC_PREFIX_HEADER = SPGlobalFile/SPPrefixHeader.pch;
 				INFOPLIST_FILE = SPUploadDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Super.SPUploadDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = Supertest.SPUploadDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
